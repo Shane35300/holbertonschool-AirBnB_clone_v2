@@ -10,6 +10,7 @@ from models.state import State
 from models.city import City
 from models.amenity import Amenity
 from models.review import Review
+from datetime import datetime
 
 
 class HBNBCommand(cmd.Cmd):
@@ -113,18 +114,47 @@ class HBNBCommand(cmd.Cmd):
         """ Overrides the emptyline method of CMD """
         pass
 
-    def do_create(self, args):
+    def do_create(self, arguments):
         """ Create an object of any class"""
-        if not args:
+        args = arguments.split()
+
+        if not args or len(args) < 1:
             print("** class name missing **")
             return
-        elif args not in HBNBCommand.classes:
+
+        class_name = args[0]
+
+        if class_name not in HBNBCommand.classes:
             print("** class doesn't exist **")
             return
-        new_instance = HBNBCommand.classes[args]()
+
+        param_pairs = args[1:]
+        parameter = {}
+
+        for pair in param_pairs:
+            try:
+                key, value = pair.split("=")
+                parameter[key] = value
+            except ValueError:
+                pass
+
+        parameter["updated_at"] = str(datetime.now().strftime('%Y-%m-%dT%H:%M:%S.%f'))
+        parameter["created_at"] = datetime.now().strftime('%Y-%m-%dT%H:%M:%S.%f')
+
+        parameter['__class__'] = class_name
+
+        for key, value in parameter.items():
+            if not value:
+                del parameter[key]
+
+        if parameter:
+            new_instance = HBNBCommand.classes[class_name](**parameter)
+        else:
+            new_instance = HBNBCommand.classes[class_name]()
+        storage.new(new_instance)
         storage.save()
         print(new_instance.id)
-        storage.save()
+
 
     def help_create(self):
         """ Help information for the create method """
