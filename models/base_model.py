@@ -24,7 +24,10 @@ class BaseModel:
                 if "updated_at" not in kwargs:
                     self.updated_at = datetime.now()
 
-                # Mettre à jour les attributs de l'instance avec les valeurs du dictionnaire
+                """
+                Mettre à jour les attributs de
+                l'instance avec les valeurs du dictionnaire
+                """
                 self.__dict__.update(kwargs)
 
                 # Supprimer la clé '__class__' si elle existe
@@ -32,10 +35,12 @@ class BaseModel:
 
                 # Convertir les horodatages si nécessaire
                 if 'updated_at' in kwargs:
-                    self.updated_at = datetime.strptime(kwargs['updated_at'], '%Y-%m-%dT%H:%M:%S.%f')
+                    self.updated_at = datetime.strptime(
+                        kwargs['updated_at'], '%Y-%m-%dT%H:%M:%S.%f')
 
                 if 'created_at' in kwargs:
-                    self.created_at = datetime.strptime(kwargs['created_at'], '%Y-%m-%dT%H:%M:%S.%f')
+                    self.created_at = datetime.strptime(
+                        kwargs['created_at'], '%Y-%m-%dT%H:%M:%S.%f')
 
                 storage.new(self)
 
