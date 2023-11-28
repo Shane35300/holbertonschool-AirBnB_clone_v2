@@ -15,12 +15,32 @@ class BaseModel:
             self.updated_at = datetime.now()
             storage.new(self)
         else:
-            kwargs['updated_at'] = datetime.strptime(kwargs['updated_at'],
-                                                     '%Y-%m-%dT%H:%M:%S.%f')
-            kwargs['created_at'] = datetime.strptime(kwargs['created_at'],
-                                                     '%Y-%m-%dT%H:%M:%S.%f')
-            del kwargs['__class__']
-            self.__dict__.update(kwargs)
+            from models import storage
+            try:
+                if "id" not in kwargs:
+                    self.id = str(uuid.uuid4())
+                if "created_at" not in kwargs:
+                    self.created_at = datetime.now()
+                if "updated_at" not in kwargs:
+                    self.updated_at = datetime.now()
+
+                # Mettre à jour les attributs de l'instance avec les valeurs du dictionnaire
+                self.__dict__.update(kwargs)
+
+                # Supprimer la clé '__class__' si elle existe
+                kwargs.pop('__class__', None)
+
+                # Convertir les horodatages si nécessaire
+                if 'updated_at' in kwargs:
+                    self.updated_at = datetime.strptime(kwargs['updated_at'], '%Y-%m-%dT%H:%M:%S.%f')
+
+                if 'created_at' in kwargs:
+                    self.created_at = datetime.strptime(kwargs['created_at'], '%Y-%m-%dT%H:%M:%S.%f')
+
+                storage.new(self)
+
+            except Exception as e:
+                print(f"Error initializing instance: {e}")
 
     def __str__(self):
         """Returns a string representation of the instance"""

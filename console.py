@@ -10,6 +10,7 @@ from models.state import State
 from models.city import City
 from models.amenity import Amenity
 from models.review import Review
+from datetime import datetime
 
 
 class HBNBCommand(cmd.Cmd):
@@ -113,18 +114,38 @@ class HBNBCommand(cmd.Cmd):
         """ Overrides the emptyline method of CMD """
         pass
 
-    def do_create(self, args):
-        """ Create an object of any class"""
-        if not args:
-            print("** class name missing **")
-            return
-        elif args not in HBNBCommand.classes:
-            print("** class doesn't exist **")
-            return
-        new_instance = HBNBCommand.classes[args]()
-        storage.save()
+    def do_create(self, arg):
+        """Create an object of any class with given parameters"""
+        if not arg:
+            raise SyntaxError("No arguments provided")
+
+        args_list = arg.split(" ")
+        class_name = args_list[0]
+
+        if class_name not in HBNBCommand.classes:
+            raise NameError("Class doesn't exist")
+
+        parameters = {}
+        for param in args_list[1:]:
+            key, value = param.split("=")
+
+            # Process the value based on the specified rules
+            if value.startswith('"') and value.endswith('"'):
+                value = value[1:-1].replace('\\"', '"').replace('_', ' ')
+            elif '.' in value:
+                value = float(value)
+            else:
+                try:
+                    value = int(value)
+                except ValueError:
+                    continue
+
+            parameters[key] = value
+
+        # Create an instance of the specified class with the given parameters
+        new_instance = HBNBCommand.classes[class_name](**parameters)
+        new_instance.save()
         print(new_instance.id)
-        storage.save()
 
     def help_create(self):
         """ Help information for the create method """
