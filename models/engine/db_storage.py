@@ -27,12 +27,20 @@ class DBStorage:
 
     def all(self, cls=None):
         """Query on the current database session"""
-        from models import classes
+        from models.state import State
+        from models.city import City
+        from models.user import User
+        from models.place import Place
+        from models.review import Review
+        from models.amenity import Amenity
+        from models.base_model import Base
+
+        dict = {'State': State, 'City': City, 'User': User, 'Place': Place, 'Review': Review, 'Amenity': Amenity}
         result = {}
         if cls:
-            query_result = self.__session.query(classes[cls]).all()
+            query_result = self.__session.query(dict[cls.__name__]).all()
         else:
-            for class_name, class_obj in classes.items():
+            for class_name, class_obj in dict.items():
                 query_result = self.__session.query(class_obj).all()
                 result.update({obj.__class__.__name__ + '.' + obj.id: obj
                                for obj in query_result})
