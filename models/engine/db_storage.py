@@ -4,6 +4,8 @@ from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker, scoped_session
 from os import getenv
 from models.base_model import Base
+from models.base_model import BaseModel
+
 
 class DBStorage:
     """This class manages the database storage for HBNB"""
@@ -35,15 +37,20 @@ class DBStorage:
         from models.amenity import Amenity
         from models.base_model import Base
 
-        dict = {'State': State, 'City': City, 'User': User, 'Place': Place, 'Review': Review, 'Amenity': Amenity}
+        classes = [State, City, User, Place, Review, Amenity, BaseModel]
         result = {}
+
         if cls:
-            query_result = self.__session.query(dict[cls.__name__]).all()
+            if cls in classes:
+                query_result = self.__session.query(cls).all()
+                result = {obj.__class__.__name__ +
+                          '.' + obj.id: obj for obj in query_result}
         else:
-            for class_name, class_obj in dict.items():
-                query_result = self.__session.query(class_obj).all()
-                result.update({obj.__class__.__name__ + '.' + obj.id: obj
-                               for obj in query_result})
+            for model_class in classes:
+                query_result = self.__session.query(model_class).all()
+                result.update({obj.__class__.__name__ +
+                               '.' + obj.id: obj for obj in query_result})
+
         return result
 
     def new(self, obj):
