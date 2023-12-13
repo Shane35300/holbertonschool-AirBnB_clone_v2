@@ -11,8 +11,8 @@ app = Flask(__name__)
 @app.route('/', strict_slashes=False)
 def hello_hbnb():
     """Display 'Hello HBNB!'"""
-    message = "Hello HBNB!"
-    return message
+
+    return "Hello HBNB!"
 
 
 if __name__ == '__main__':
