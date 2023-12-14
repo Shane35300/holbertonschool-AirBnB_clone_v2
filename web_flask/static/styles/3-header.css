@@ -2,17 +2,17 @@ header {
 	background-color: white;
 	height: 70px;
 	width: 100%;
-	
 	border-bottom: 1px solid #CCCCCC;
+	display: flex;
+	align-items: center;
 }
 
-#header_logo {
-	height: 100%;
-	width: 142px;
-
-	background-image: url("../images/logo.png");
-	background-repeat: no-repeat;
-	background-position: center;
-
+header .logo {
 	margin-left: 20px;
-}
+	background-image: url('../images/logo-header.png');
+	background-size: contain; /* Ajustez selon vos besoins */
+	background-repeat: no-repeat;
+	height: 40px; /* Ajustez selon vos besoins */
+	width: 100px; /* Ajustez selon vos besoins */
+	/* Autres styles pour le logo */
+  }
