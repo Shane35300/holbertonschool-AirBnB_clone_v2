@@ -58,35 +58,36 @@
 	padding-top: 15px;
 }
 
-.filters .locations:hover .popover,
+.filters .locations:hover .popover ,
 .filters .amenities:hover .popover {
-	display: block;
+	display: flex;
+	flex-direction: row;
+	margin: 0px;
+	padding: 0px;
+	justify-content: flex-start;
+	align-items: flex-start;
+	height: 300px;
+	overflow: auto;
 }
 
-.filters .locations .popover ul,
-.filters .amenities .popover ul {
+.popover ul {
 	list-style: none;
-	margin: 0;
-	display: flex;
-	flex-direction: column;
+	justify-content: flex-end;
 }
 
-.filters .locations .popover h2 {
-	font-size: 16px;
-	margin: 15px 0;
+li.state {
+	margin-top: 0px;
+	line-height: 30px;
+	font-size: 20px;
 }
 
-.filters .amenities .popover ul li {
-	padding: 8px;
-	height: 20px;
-	display: flex;
-	align-items: center;
+li.city {
+	margin-top: 0px;
+	line-height: 15px;
 }
-
-.filters .locations .popover ul li {
-	padding-bottom: 20px;
+.state ul {
+	margin-left: -10px;
 }
-
-.liste li {
-	margin-left: -25px;
+.amenities .popover ul li {
+	line-height: 30px;
 }
